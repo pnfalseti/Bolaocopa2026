@@ -1,5 +1,14 @@
 {
-  "palpites": [],
+  "palpites": [
+    {
+      "id": 1781388629581,
+      "jogoId": 1,
+      "nome": "Pedro",
+      "golsBrasil": 3,
+      "golsAdv": 0,
+      "timestamp": "13/06/2026, 19:10:29"
+    }
+  ],
   "resultados": {},
   "acumulados": {}
 }
