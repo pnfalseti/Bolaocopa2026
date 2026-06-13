@@ -9,151 +9,172 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --verde: #009C3B;
-      --verde-escuro: #007A2D;
-      --amarelo: #FFDF00;
-      --azul: #002776;
-      --azul-claro: #1a3a8f;
-      --cinza-bg: #f0f4f0;
-      --cinza-card: #ffffff;
-      --cinza-texto: #1a1a2e;
-      --cinza-suave: #e8f0e8;
-      --erro: #c62828;
-      --acerto: #2e7d32;
-      --acumulado: #e65100;
+      --verde: #009C3B; --verde-escuro: #007A2D; --amarelo: #FFDF00;
+      --azul: #002776; --azul-claro: #1a3a8f; --cinza-bg: #f0f4f0;
+      --cinza-card: #ffffff; --cinza-texto: #1a1a2e; --cinza-suave: #e8f0e8;
+      --erro: #c62828; --acerto: #2e7d32; --acumulado: #e65100;
     }
 
     body { font-family: 'Inter', sans-serif; background-color: var(--cinza-bg); color: var(--cinza-texto); min-height: 100vh; }
 
-    .token-aviso { display:none; background:#fff3e0; border-bottom:3px solid #f57c00; padding:0.7rem 1.5rem; text-align:center; font-size:0.88rem; font-weight:600; color:#e65100; }
-    .token-aviso a { color:#bf360c; }
-    .token-aviso code { background:rgba(0,0,0,0.08); padding:0.1rem 0.4rem; border-radius:4px; }
-
-    header {
-      background: linear-gradient(135deg, var(--verde) 0%, var(--verde-escuro) 50%, var(--azul) 100%);
-      padding: 2rem 1rem 1.5rem; text-align: center; position: relative; overflow: hidden;
-    }
-    header::before {
-      content: ''; position: absolute; inset: 0;
-      background: repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(255,255,255,0.03) 30px, rgba(255,255,255,0.03) 60px);
-    }
+    header { background: linear-gradient(135deg, var(--verde) 0%, var(--verde-escuro) 50%, var(--azul) 100%); padding: 2rem 1rem 1.5rem; text-align: center; position: relative; overflow: hidden; }
+    header::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(255,255,255,0.03) 30px, rgba(255,255,255,0.03) 60px); }
     .header-inner { position: relative; z-index: 1; }
     header h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.8rem,8vw,5rem); color: var(--amarelo); letter-spacing: 0.04em; line-height: 1; text-shadow: 3px 3px 0 rgba(0,0,0,0.3); }
     header p { color: rgba(255,255,255,0.85); font-size: 1rem; margin-top: 0.4rem; font-weight: 500; }
-    .sync-info { color: rgba(255,255,255,0.6); font-size: 0.74rem; margin-top: 0.25rem; }
-    .flag-strip { display:flex; justify-content:center; margin-top:1rem; }
-    .flag-strip span { display:inline-block; height:6px; width:60px; }
-    .flag-strip span:nth-child(1) { background:var(--verde); border-radius:3px 0 0 3px; }
-    .flag-strip span:nth-child(2) { background:var(--amarelo); width:40px; }
-    .flag-strip span:nth-child(3) { background:var(--azul); border-radius:0 3px 3px 0; }
+    .header-bar { display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 0.75rem; }
+    .sync-info { color: rgba(255,255,255,0.6); font-size: 0.74rem; }
+    .btn-token { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.35); color: white; border-radius: 20px; padding: 0.25rem 0.9rem; font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.2s; white-space: nowrap; }
+    .btn-token:hover { background: rgba(255,255,255,0.25); }
+    .btn-token.ativo { background: rgba(0,200,80,0.25); border-color: rgba(0,255,100,0.5); }
+    .flag-strip { display: flex; justify-content: center; margin-top: 0.75rem; }
+    .flag-strip span { display: inline-block; height: 6px; width: 60px; }
+    .flag-strip span:nth-child(1) { background: var(--verde); border-radius: 3px 0 0 3px; }
+    .flag-strip span:nth-child(2) { background: var(--amarelo); width: 40px; }
+    .flag-strip span:nth-child(3) { background: var(--azul); border-radius: 0 3px 3px 0; }
+
+    /* ─── MODAL TOKEN ─── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 10000; justify-content: center; align-items: center; padding: 1rem; }
+    .modal-overlay.show { display: flex; }
+    .modal-card { background: white; border-radius: 16px; padding: 2rem; max-width: 460px; width: 100%; box-shadow: 0 12px 40px rgba(0,0,0,0.35); }
+    .modal-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--azul); letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+    .modal-desc { font-size: 0.85rem; color: #555; line-height: 1.55; margin-bottom: 1.1rem; }
+    .modal-desc strong { color: #333; }
+    .modal-input { width: 100%; border: 2px solid #ccc; border-radius: 8px; padding: 0.6rem 0.8rem; font-size: 0.9rem; font-family: monospace; outline: none; transition: border-color 0.2s; margin-bottom: 0.5rem; }
+    .modal-input:focus { border-color: var(--verde); }
+    .modal-status { font-size: 0.82rem; font-weight: 600; min-height: 1.2rem; margin-bottom: 0.75rem; }
+    .modal-btns { display: flex; gap: 0.6rem; justify-content: flex-end; }
+    .btn-modal-cancelar { background: transparent; border: 1.5px solid #ccc; border-radius: 8px; padding: 0.5rem 1.1rem; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 0.85rem; color: #555; }
+    .btn-modal-cancelar:hover { border-color: #999; }
+    .btn-modal-salvar { background: var(--verde); color: white; border: none; border-radius: 8px; padding: 0.5rem 1.3rem; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 0.85rem; transition: background 0.2s; }
+    .btn-modal-salvar:hover { background: var(--verde-escuro); }
+    .modal-rodape { margin-top: 0.9rem; padding-top: 0.9rem; border-top: 1px solid #eee; text-align: center; }
+    .btn-limpar-token { background: none; border: none; color: #999; font-size: 0.78rem; cursor: pointer; font-family: 'Inter', sans-serif; text-decoration: underline; }
+    .btn-limpar-token:hover { color: var(--erro); }
 
     main { max-width: 900px; margin: 0 auto; padding: 2rem 1rem 4rem; }
     section { margin-bottom: 2.5rem; }
-    .section-title { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; color:var(--verde-escuro); letter-spacing:0.06em; border-left:5px solid var(--amarelo); padding-left:0.75rem; margin-bottom:1rem; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--verde-escuro); letter-spacing: 0.06em; border-left: 5px solid var(--amarelo); padding-left: 0.75rem; margin-bottom: 1rem; }
 
-    .jogo-card { background:var(--cinza-card); border-radius:12px; border:1px solid #d8e8d8; padding:1.25rem 1.5rem; margin-bottom:1rem; box-shadow:0 2px 8px rgba(0,40,0,0.06); transition:box-shadow 0.2s; }
-    .jogo-card:hover { box-shadow:0 4px 16px rgba(0,40,0,0.1); }
-    .jogo-header { display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem; flex-wrap:wrap; }
-    .jogo-num { background:var(--verde); color:white; font-family:'Bebas Neue',sans-serif; font-size:1rem; padding:0.15rem 0.6rem; border-radius:20px; letter-spacing:0.05em; }
-    .jogo-titulo { font-weight:700; font-size:1rem; flex:1; }
-    .pot-badge { font-size:0.82rem; font-weight:700; padding:0.25rem 0.75rem; border-radius:20px; margin-left:auto; }
-    .pot-badge.normal { background:#e8f5e9; color:var(--verde-escuro); }
-    .pot-badge.acumulado { background:#fff3e0; color:var(--acumulado); }
-    .pot-badge.encerrado { background:#f3e5f5; color:#6a1b9a; }
+    .jogo-card { background: var(--cinza-card); border-radius: 12px; border: 1px solid #d8e8d8; padding: 1.25rem 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,40,0,0.06); transition: box-shadow 0.2s; }
+    .jogo-card:hover { box-shadow: 0 4px 16px rgba(0,40,0,0.1); }
+    .jogo-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .jogo-num { background: var(--verde); color: white; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; padding: 0.15rem 0.6rem; border-radius: 20px; letter-spacing: 0.05em; }
+    .jogo-titulo { font-weight: 700; font-size: 1rem; flex: 1; }
+    .pot-badge { font-size: 0.82rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 20px; margin-left: auto; }
+    .pot-badge.normal { background: #e8f5e9; color: var(--verde-escuro); }
+    .pot-badge.acumulado { background: #fff3e0; color: var(--acumulado); }
+    .pot-badge.encerrado { background: #f3e5f5; color: #6a1b9a; }
 
-    .form-palpite { display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; }
-    .form-palpite label { font-size:0.85rem; font-weight:600; color:#444; }
-    input[type="text"], input[type="number"] { font-family:'Inter',sans-serif; border:2px solid #ccc; border-radius:8px; padding:0.45rem 0.65rem; font-size:0.9rem; transition:border-color 0.2s,box-shadow 0.2s; outline:none; background:#fafafa; }
-    input[type="text"]:focus, input[type="number"]:focus { border-color:var(--verde); box-shadow:0 0 0 3px rgba(0,156,59,0.15); background:white; }
-    input[type="text"].nome-input { width:160px; }
-    input[type="number"].placar-input { width:56px; text-align:center; font-weight:700; font-size:1.1rem; }
-    .vs-label { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; color:#aaa; letter-spacing:0.05em; }
+    .form-palpite { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+    .form-palpite label { font-size: 0.85rem; font-weight: 600; color: #444; }
+    input[type="text"], input[type="number"] { font-family: 'Inter', sans-serif; border: 2px solid #ccc; border-radius: 8px; padding: 0.45rem 0.65rem; font-size: 0.9rem; transition: border-color 0.2s, box-shadow 0.2s; outline: none; background: #fafafa; }
+    input[type="text"]:focus, input[type="number"]:focus { border-color: var(--verde); box-shadow: 0 0 0 3px rgba(0,156,59,0.15); background: white; }
+    input[type="text"].nome-input { width: 160px; }
+    input[type="number"].placar-input { width: 56px; text-align: center; font-weight: 700; font-size: 1.1rem; }
+    .vs-label { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: #aaa; letter-spacing: 0.05em; }
+    .btn-apostar { background: var(--verde); color: white; border: none; border-radius: 8px; padding: 0.5rem 1.1rem; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: background 0.2s, transform 0.1s; letter-spacing: 0.02em; }
+    .btn-apostar:hover { background: var(--verde-escuro); transform: translateY(-1px); }
+    .btn-apostar:active { transform: translateY(0); }
+    .btn-apostar:disabled { background: #aaa; cursor: not-allowed; transform: none; }
 
-    .btn-apostar { background:var(--verde); color:white; border:none; border-radius:8px; padding:0.5rem 1.1rem; font-family:'Inter',sans-serif; font-weight:700; font-size:0.85rem; cursor:pointer; transition:background 0.2s,transform 0.1s; letter-spacing:0.02em; }
-    .btn-apostar:hover { background:var(--verde-escuro); transform:translateY(-1px); }
-    .btn-apostar:active { transform:translateY(0); }
-    .btn-apostar:disabled { background:#aaa; cursor:not-allowed; transform:none; }
+    .jogo-resultado-section { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed #ddd; }
+    .jogo-resultado-label { font-size: 0.8rem; font-weight: 600; color: #555; margin-bottom: 0.4rem; }
+    .resultado-inputs { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+    .btn-confirmar { background: var(--azul); color: white; border: none; border-radius: 8px; padding: 0.4rem 0.9rem; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: background 0.2s; }
+    .btn-confirmar:hover { background: var(--azul-claro); }
+    .btn-limpar-resultado { background: transparent; border: 1.5px solid #bbb; color: #666; border-radius: 8px; padding: 0.35rem 0.7rem; font-size: 0.78rem; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .btn-limpar-resultado:hover { border-color: #999; color: #333; }
 
-    .jogo-resultado-section { margin-top:0.75rem; padding-top:0.75rem; border-top:1px dashed #ddd; }
-    .jogo-resultado-label { font-size:0.8rem; font-weight:600; color:#555; margin-bottom:0.4rem; }
-    .resultado-inputs { display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; }
-    .btn-confirmar { background:var(--azul); color:white; border:none; border-radius:8px; padding:0.4rem 0.9rem; font-family:'Inter',sans-serif; font-weight:700; font-size:0.8rem; cursor:pointer; transition:background 0.2s; }
-    .btn-confirmar:hover { background:var(--azul-claro); }
-    .btn-limpar-resultado { background:transparent; border:1.5px solid #bbb; color:#666; border-radius:8px; padding:0.35rem 0.7rem; font-size:0.78rem; cursor:pointer; font-family:'Inter',sans-serif; }
-    .btn-limpar-resultado:hover { border-color:#999; color:#333; }
+    .palpites-section { margin-top: 3rem; }
+    .palpites-filtro { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .filtro-btn { background: white; border: 2px solid #ccc; border-radius: 20px; padding: 0.35rem 1rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: 'Inter', sans-serif; }
+    .filtro-btn.ativo { background: var(--verde); border-color: var(--verde); color: white; }
+    .filtro-btn:hover:not(.ativo) { border-color: var(--verde); color: var(--verde); }
 
-    .palpites-section { margin-top:3rem; }
-    .palpites-filtro { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem; }
-    .filtro-btn { background:white; border:2px solid #ccc; border-radius:20px; padding:0.35rem 1rem; font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.15s; font-family:'Inter',sans-serif; }
-    .filtro-btn.ativo { background:var(--verde); border-color:var(--verde); color:white; }
-    .filtro-btn:hover:not(.ativo) { border-color:var(--verde); color:var(--verde); }
+    .palpites-jogo { margin-bottom: 2rem; }
+    .palpites-jogo-titulo { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--amarelo); }
+    .palpites-jogo-nome { font-weight: 700; font-size: 1rem; }
+    .palpites-total { font-size: 0.82rem; color: #555; background: #f5f5f5; padding: 0.2rem 0.65rem; border-radius: 20px; }
+    .palpites-pot { margin-left: auto; font-weight: 700; color: var(--verde-escuro); font-size: 0.9rem; }
+    .palpites-pot.acumulado { color: var(--acumulado); }
 
-    .palpites-jogo { margin-bottom:2rem; }
-    .palpites-jogo-titulo { display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem; padding-bottom:0.5rem; border-bottom:2px solid var(--amarelo); }
-    .palpites-jogo-nome { font-weight:700; font-size:1rem; }
-    .palpites-total { font-size:0.82rem; color:#555; background:#f5f5f5; padding:0.2rem 0.65rem; border-radius:20px; }
-    .palpites-pot { margin-left:auto; font-weight:700; color:var(--verde-escuro); font-size:0.9rem; }
-    .palpites-pot.acumulado { color:var(--acumulado); }
+    .tabela-palpites { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .tabela-palpites th { background: var(--azul); color: white; padding: 0.5rem 0.75rem; text-align: left; font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase; }
+    .tabela-palpites th:nth-child(2), .tabela-palpites th:nth-child(3) { text-align: center; }
+    .tabela-palpites td { padding: 0.5rem 0.75rem; border-bottom: 1px solid #eee; }
+    .tabela-palpites td:nth-child(2) { text-align: center; font-weight: 700; font-size: 1rem; }
+    .tabela-palpites td:nth-child(3) { text-align: center; }
+    .tabela-palpites tr:nth-child(even) td { background: #fafafa; }
+    .tabela-palpites tr.acerto-exato td { background: #e8f5e9 !important; }
+    .tabela-palpites tr.acerto-exato td:first-child::before { content: '🏆 '; }
 
-    .tabela-palpites { width:100%; border-collapse:collapse; font-size:0.88rem; }
-    .tabela-palpites th { background:var(--azul); color:white; padding:0.5rem 0.75rem; text-align:left; font-size:0.78rem; letter-spacing:0.05em; text-transform:uppercase; }
-    .tabela-palpites th:nth-child(2), .tabela-palpites th:nth-child(3) { text-align:center; }
-    .tabela-palpites td { padding:0.5rem 0.75rem; border-bottom:1px solid #eee; }
-    .tabela-palpites td:nth-child(2) { text-align:center; font-weight:700; font-size:1rem; }
-    .tabela-palpites td:nth-child(3) { text-align:center; }
-    .tabela-palpites tr:nth-child(even) td { background:#fafafa; }
-    .tabela-palpites tr.acerto-exato td { background:#e8f5e9 !important; }
-    .tabela-palpites tr.acerto-exato td:first-child::before { content:'🏆 '; }
+    .badge-status { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 10px; }
+    .badge-aguardando { background: #e3f2fd; color: #1565c0; }
+    .badge-acerto { background: #e8f5e9; color: #2e7d32; }
+    .badge-errou { background: #ffebee; color: #c62828; }
+    .empty-state { text-align: center; padding: 1.5rem; color: #888; font-size: 0.88rem; background: #fafafa; border-radius: 8px; border: 1px dashed #ddd; }
 
-    .badge-status { display:inline-block; font-size:0.72rem; font-weight:700; padding:0.15rem 0.5rem; border-radius:10px; }
-    .badge-aguardando { background:#e3f2fd; color:#1565c0; }
-    .badge-acerto { background:#e8f5e9; color:#2e7d32; }
-    .badge-errou { background:#ffebee; color:#c62828; }
+    #toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--azul); color: white; padding: 0.75rem 1.5rem; border-radius: 10px; font-size: 0.9rem; font-weight: 600; z-index: 998; transition: transform 0.3s ease; white-space: nowrap; box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+    #toast.sucesso { background: var(--verde-escuro); }
+    #toast.erro { background: var(--erro); }
+    #toast.especial { background: #f9a825; color: #000; }
 
-    .empty-state { text-align:center; padding:1.5rem; color:#888; font-size:0.88rem; background:#fafafa; border-radius:8px; border:1px dashed #ddd; }
+    .resumo-card { background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%); border-radius: 12px; padding: 1.25rem 1.5rem; color: white; display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .resumo-item { flex: 1; min-width: 120px; }
+    .resumo-item .val { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--amarelo); line-height: 1; }
+    .resumo-item .lbl { font-size: 0.78rem; opacity: 0.85; margin-top: 0.2rem; }
 
-    #toast { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%) translateY(80px); background:var(--azul); color:white; padding:0.75rem 1.5rem; border-radius:10px; font-size:0.9rem; font-weight:600; z-index:998; transition:transform 0.3s ease; white-space:nowrap; box-shadow:0 4px 20px rgba(0,0,0,0.25); }
-    #toast.show { transform:translateX(-50%) translateY(0); }
-    #toast.sucesso { background:var(--verde-escuro); }
-    #toast.erro { background:var(--erro); }
-    #toast.especial { background:#f9a825; color:#000; }
+    #loading-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 9999; justify-content: center; align-items: center; }
+    #loading-overlay.show { display: flex; }
+    .loading-card { background: white; border-radius: 16px; padding: 2rem 2.5rem; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+    .loading-spinner { font-size: 2.5rem; display: inline-block; animation: spin 1.2s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .loading-msg { margin-top: 0.75rem; font-weight: 700; font-size: 1rem; color: #333; }
 
-    .resumo-card { background:linear-gradient(135deg,var(--azul) 0%,var(--azul-claro) 100%); border-radius:12px; padding:1.25rem 1.5rem; color:white; display:flex; gap:1.5rem; flex-wrap:wrap; margin-bottom:2rem; }
-    .resumo-item { flex:1; min-width:120px; }
-    .resumo-item .val { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--amarelo); line-height:1; }
-    .resumo-item .lbl { font-size:0.78rem; opacity:0.85; margin-top:0.2rem; }
-
-    #loading-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; justify-content:center; align-items:center; }
-    #loading-overlay.show { display:flex; }
-    .loading-card { background:white; border-radius:16px; padding:2rem 2.5rem; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.3); }
-    .loading-spinner { font-size:2.5rem; display:inline-block; animation:spin 1.2s linear infinite; }
-    @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-    .loading-msg { margin-top:0.75rem; font-weight:700; font-size:1rem; color:#333; }
-
-    @media (max-width:600px) {
-      .form-palpite { gap:0.4rem; }
-      input[type="text"].nome-input { width:130px; }
-      .resumo-card { gap:1rem; }
-      .tabela-palpites th, .tabela-palpites td { padding:0.4rem 0.5rem; font-size:0.8rem; }
+    @media (max-width: 600px) {
+      .form-palpite { gap: 0.4rem; }
+      input[type="text"].nome-input { width: 130px; }
+      .resumo-card { gap: 1rem; }
+      .tabela-palpites th, .tabela-palpites td { padding: 0.4rem 0.5rem; font-size: 0.8rem; }
     }
   </style>
 </head>
 <body>
 
-<div class="token-aviso" id="token-aviso">
-  ⚠️ <strong>Token do GitHub não configurado!</strong>
-  Edite o arquivo <code>index.html</code> e defina <code>GH_TOKEN</code>.
-  <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">Criar token →</a>
-</div>
-
 <header>
   <div class="header-inner">
     <h1>🇧🇷 Bolão dos Mandarinhos</h1>
     <p>R$ 10 por palpite · quem acertar o placar exato leva tudo!</p>
-    <div class="sync-info" id="sync-info">Conectando ao GitHub...</div>
+    <div class="header-bar">
+      <div class="sync-info" id="sync-info">Conectando...</div>
+      <button class="btn-token" id="btn-token" onclick="abrirModal()">⚙️ Configurar Token</button>
+    </div>
     <div class="flag-strip"><span></span><span></span><span></span></div>
   </div>
 </header>
+
+<!-- Modal de configuração do token -->
+<div class="modal-overlay" id="modal-token">
+  <div class="modal-card">
+    <h3>🔑 Token de Acesso</h3>
+    <p class="modal-desc">
+      O token é necessário para <strong>salvar palpites</strong>.<br>
+      Peça ao administrador do bolão e cole abaixo.<br>
+      Ele ficará salvo só no <strong>seu navegador</strong> — nunca no código.
+    </p>
+    <input type="password" class="modal-input" id="modal-input" placeholder="github_pat_..." autocomplete="off" />
+    <div class="modal-status" id="modal-status"></div>
+    <div class="modal-btns">
+      <button class="btn-modal-cancelar" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-modal-salvar" onclick="salvarToken()">Salvar e conectar</button>
+    </div>
+    <div class="modal-rodape">
+      <button class="btn-limpar-token" onclick="limparToken()">Remover token salvo deste navegador</button>
+    </div>
+  </div>
+</div>
 
 <main>
   <div class="resumo-card">
@@ -165,13 +186,13 @@
 
   <section>
     <div class="section-title">📋 Registrar Palpite</div>
-    <div id="jogos-container"><div class="empty-state">⏳ Carregando dados do GitHub...</div></div>
+    <div id="jogos-container"><div class="empty-state">⏳ Carregando dados...</div></div>
   </section>
 
   <section class="palpites-section">
     <div class="section-title">📊 Palpites Cadastrados</div>
     <div class="palpites-filtro" id="filtros"></div>
-    <div id="palpites-container"><div class="empty-state">⏳ Carregando dados do GitHub...</div></div>
+    <div id="palpites-container"><div class="empty-state">⏳ Carregando dados...</div></div>
   </section>
 </main>
 
@@ -185,23 +206,19 @@
 </div>
 
 <script>
-  // ─── CONFIGURAÇÃO GITHUB ─────────────────────────────────────────────────
-  //
-  //  COMO CONFIGURAR:
-  //  1. Acesse https://github.com/settings/tokens?type=beta
-  //  2. Clique em "Generate new token" → Fine-grained token
-  //  3. Nome: "Bolão Copa 2026"
-  //  4. Repository access → somente "bolaocopa2026"
-  //  5. Permissions → Contents → Read and write
-  //  6. Clique em Generate token e copie o valor
-  //  7. Substitua COLOQUE_SEU_TOKEN_AQUI pelo token gerado
-  //
-  const GH_TOKEN  = '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';
+  // ─── CONFIG ──────────────────────────────────────────────────────────────
   const GH_OWNER  = 'pnfalseti';
-  const GH_REPO   = 'bolaocopa2026';
+  const GH_REPO   = 'Bolaocopa2026';
   const GH_BRANCH = 'main';
   const GH_FILE   = 'data/bolao.json';
   const GH_API    = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
+  const GH_RAW    = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${GH_FILE}`;
+
+  // ─── TOKEN (salvo no localStorage do navegador) ───────────────────────────
+  const TOKEN_KEY = 'bolao_gh_token';
+  function getToken() { return localStorage.getItem(TOKEN_KEY) || ''; }
+  function saveToken(t) { localStorage.setItem(TOKEN_KEY, t.trim()); }
+  function deleteToken() { localStorage.removeItem(TOKEN_KEY); }
 
   // ─── DADOS DOS JOGOS ─────────────────────────────────────────────────────
   const JOGOS_BASE = [
@@ -215,16 +232,13 @@
     { id: 8, adversario: '(Final)',     data: 'A definir',       grupo: 'Final'          },
   ];
 
-  // ─── ESTADO (sincronizado com o GitHub) ──────────────────────────────────
   let estado = { palpites: [], resultados: {}, acumulados: {} };
 
   // ─── GITHUB API ──────────────────────────────────────────────────────────
-  function ghHeaders() {
-    return {
-      'Authorization': `token ${GH_TOKEN}`,
-      'Accept': 'application/vnd.github.v3+json',
-      'Content-Type': 'application/json'
-    };
+  function ghHeaders(token) {
+    const h = { 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
+    if (token) h['Authorization'] = `token ${token}`;
+    return h;
   }
 
   function ghDecode(b64) {
@@ -236,29 +250,32 @@
   }
 
   async function ghFetch() {
-    const res = await fetch(`${GH_API}?ref=${GH_BRANCH}&_nc=${Date.now()}`, { headers: ghHeaders() });
-    if (res.status === 404) {
-      return { data: { palpites: [], resultados: {}, acumulados: {} }, sha: null };
+    const token = getToken();
+    if (token) {
+      // Com token: API real, sem cache, SHA disponível para escrita
+      const res = await fetch(`${GH_API}?ref=${GH_BRANCH}&_nc=${Date.now()}`, { headers: ghHeaders(token) });
+      if (res.status === 404) return { data: { palpites: [], resultados: {}, acumulados: {} }, sha: null };
+      if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.message || `GitHub API ${res.status}`); }
+      const json = await res.json();
+      return { data: ghDecode(json.content), sha: json.sha };
+    } else {
+      // Sem token: URL raw pública (somente leitura, cache ~5min)
+      const res = await fetch(GH_RAW + '?_=' + Date.now());
+      if (!res.ok) return { data: { palpites: [], resultados: {}, acumulados: {} }, sha: null };
+      return { data: await res.json(), sha: null };
     }
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.message || `GitHub API error: ${res.status}`);
-    }
-    const json = await res.json();
-    return { data: ghDecode(json.content), sha: json.sha };
   }
 
   async function ghWrite(content, sha, msg) {
+    const token = getToken();
     const body = { message: msg, content: ghEncode(content), branch: GH_BRANCH };
     if (sha) body.sha = sha;
-    const res = await fetch(GH_API, { method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body) });
+    const res = await fetch(GH_API, { method: 'PUT', headers: ghHeaders(token), body: JSON.stringify(body) });
     if (res.status === 409) { const e = new Error('conflict'); e.isConflict = true; throw e; }
-    if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.message || `GitHub write error: ${res.status}`); }
+    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.message || `GitHub write ${res.status}`); }
     return res.json();
   }
 
-  // Executa operação com retry em caso de conflito concorrente.
-  // fn(freshData) → muta freshData e retorna msg de commit (string) ou false para abortar.
   async function withWrite(fn, maxRetries = 3) {
     for (let attempt = 0; attempt < maxRetries; attempt++) {
       const { data: fresh, sha } = await ghFetch();
@@ -270,55 +287,95 @@
         estado = fresh;
         return true;
       } catch (e) {
-        if (e.isConflict && attempt < maxRetries - 1) {
-          await new Promise(r => setTimeout(r, 300 * (attempt + 1)));
-          continue;
-        }
+        if (e.isConflict && attempt < maxRetries - 1) { await new Promise(r => setTimeout(r, 300 * (attempt + 1))); continue; }
         throw e;
       }
     }
   }
 
-  // ─── LOADING ─────────────────────────────────────────────────────────────
-  function setLoading(show) {
-    document.getElementById('loading-overlay').classList.toggle('show', show);
+  // ─── MODAL TOKEN ─────────────────────────────────────────────────────────
+  function abrirModal() {
+    document.getElementById('modal-input').value = getToken();
+    document.getElementById('modal-status').textContent = '';
+    document.getElementById('modal-status').style.color = '';
+    document.getElementById('modal-token').classList.add('show');
+    setTimeout(() => document.getElementById('modal-input').focus(), 100);
+  }
+
+  function fecharModal() {
+    document.getElementById('modal-token').classList.remove('show');
+  }
+
+  async function salvarToken() {
+    const token = document.getElementById('modal-input').value.trim();
+    const status = document.getElementById('modal-status');
+    if (!token) { status.textContent = 'Cole o token acima.'; status.style.color = 'var(--erro)'; return; }
+    status.textContent = '⏳ Verificando token...'; status.style.color = '#888';
+    try {
+      const res = await fetch(`${GH_API}?ref=${GH_BRANCH}`, { headers: ghHeaders(token) });
+      if (res.status === 401) { status.textContent = '❌ Token inválido ou expirado.'; status.style.color = 'var(--erro)'; return; }
+      if (res.status === 403) { status.textContent = '❌ Permissão negada. Verifique se Contents está como Read and write.'; status.style.color = 'var(--erro)'; return; }
+      // 200 ou 404 = token válido
+      saveToken(token);
+      fecharModal();
+      atualizarBotaoToken();
+      showToast('✅ Token salvo! Conectando...', 'sucesso');
+      const { data } = await ghFetch();
+      estado = data;
+      renderAll();
+      atualizarSyncInfo();
+    } catch (e) {
+      status.textContent = '❌ Erro de rede. Tente novamente.'; status.style.color = 'var(--erro)';
+    }
+  }
+
+  function limparToken() {
+    deleteToken();
+    fecharModal();
+    atualizarBotaoToken();
+    showToast('Token removido.', 'sucesso');
+    setTimeout(() => location.reload(), 800);
+  }
+
+  function tokenOk() {
+    if (!getToken()) { abrirModal(); return false; }
+    return true;
+  }
+
+  function atualizarBotaoToken() {
+    const btn = document.getElementById('btn-token');
+    if (!btn) return;
+    if (getToken()) {
+      btn.textContent = '🔑 Token ✓';
+      btn.classList.add('ativo');
+    } else {
+      btn.textContent = '⚙️ Configurar Token';
+      btn.classList.remove('ativo');
+    }
   }
 
   // ─── UTILS ───────────────────────────────────────────────────────────────
+  function setLoading(show) { document.getElementById('loading-overlay').classList.toggle('show', show); }
+
   function showToast(msg, tipo = 'sucesso') {
     const t = document.getElementById('toast');
     t.textContent = msg; t.className = tipo; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3200);
   }
 
-  function formatMoney(v) {
-    return 'R$ ' + v.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  }
-
-  function potDoJogo(jogoId) {
-    return (estado.palpites.filter(p => p.jogoId === jogoId).length * 10) + (estado.acumulados[jogoId] || 0);
-  }
-
-  function checkVencedor(jogoId) {
-    const res = estado.resultados[jogoId];
-    if (!res || !res.encerrado) return null;
-    return estado.palpites.filter(p => p.jogoId === jogoId && p.golsBrasil === res.golsBrasil && p.golsAdv === res.golsAdv);
-  }
-
-  function tokenOk() {
-    if (GH_TOKEN === 'COLOQUE_SEU_TOKEN_AQUI') {
-      showToast('Token do GitHub não configurado!', 'erro');
-      return false;
-    }
-    return true;
+  function formatMoney(v) { return 'R$ ' + v.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  function potDoJogo(id) { return (estado.palpites.filter(p => p.jogoId === id).length * 10) + (estado.acumulados[id] || 0); }
+  function checkVencedor(id) {
+    const r = estado.resultados[id];
+    if (!r || !r.encerrado) return null;
+    return estado.palpites.filter(p => p.jogoId === id && p.golsBrasil === r.golsBrasil && p.golsAdv === r.golsAdv);
   }
 
   function atualizarSyncInfo() {
     const el = document.getElementById('sync-info');
-    if (el) {
-      const now = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-      el.textContent = `🔄 Sincronizado às ${now} · atualiza a cada 30s`;
-    }
+    const modo = getToken() ? '🔄' : '👁️';
+    const now = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    if (el) el.textContent = `${modo} ${now} · atualiza a cada 30s`;
   }
 
   // ─── RENDER JOGOS ────────────────────────────────────────────────────────
@@ -327,38 +384,30 @@
     container.innerHTML = '';
     JOGOS_BASE.forEach(jogo => {
       const res = estado.resultados[jogo.id];
-      const encerrado = res && res.encerrado;
+      const enc = res && res.encerrado;
       const pot = potDoJogo(jogo.id);
-      const acumuladoPrevio = estado.acumulados[jogo.id] || 0;
-      const vencedores = checkVencedor(jogo.id);
-      let potClass = encerrado ? 'encerrado' : acumuladoPrevio > 0 ? 'acumulado' : 'normal';
-      let potLabel = encerrado
-        ? (vencedores && vencedores.length > 0 ? '🏆 Encerrado' : `🔄 Acumulou ${formatMoney(pot)}`)
-        : `💰 ${formatMoney(pot)}`;
-
+      const acPrevio = estado.acumulados[jogo.id] || 0;
+      const venc = checkVencedor(jogo.id);
+      const potClass = enc ? 'encerrado' : acPrevio > 0 ? 'acumulado' : 'normal';
+      const potLabel = enc ? (venc && venc.length > 0 ? '🏆 Encerrado' : `🔄 Acumulou ${formatMoney(pot)}`) : `💰 ${formatMoney(pot)}`;
       const card = document.createElement('div');
-      card.className = 'jogo-card';
-      card.id = `jogo-card-${jogo.id}`;
+      card.className = 'jogo-card'; card.id = `jogo-card-${jogo.id}`;
       card.innerHTML = `
         <div class="jogo-header">
           <span class="jogo-num">JOGO ${jogo.id}</span>
-          <div>
-            <div class="jogo-titulo">🇧🇷 Brasil × ${jogo.adversario}</div>
-            <div style="font-size:0.76rem;color:#888;margin-top:1px">${jogo.grupo} · ${jogo.data}</div>
-          </div>
+          <div><div class="jogo-titulo">🇧🇷 Brasil × ${jogo.adversario}</div>
+          <div style="font-size:0.76rem;color:#888;margin-top:1px">${jogo.grupo} · ${jogo.data}</div></div>
           <span class="pot-badge ${potClass}">${potLabel}</span>
         </div>
         <div class="form-palpite">
           <label>Nome:</label>
-          <input type="text" class="nome-input" id="nome-${jogo.id}" placeholder="Seu nome" ${encerrado ? 'disabled' : ''} />
+          <input type="text" class="nome-input" id="nome-${jogo.id}" placeholder="Seu nome" ${enc ? 'disabled' : ''} />
           <label>Placar: 🇧🇷</label>
-          <input type="number" class="placar-input" id="gb-${jogo.id}" min="0" max="20" value="0" ${encerrado ? 'disabled' : ''} />
+          <input type="number" class="placar-input" id="gb-${jogo.id}" min="0" max="20" value="0" ${enc ? 'disabled' : ''} />
           <span class="vs-label">×</span>
-          <input type="number" class="placar-input" id="ga-${jogo.id}" min="0" max="20" value="0" ${encerrado ? 'disabled' : ''} />
+          <input type="number" class="placar-input" id="ga-${jogo.id}" min="0" max="20" value="0" ${enc ? 'disabled' : ''} />
           <label style="font-size:0.78rem;color:#777">${jogo.adversario}</label>
-          <button class="btn-apostar" onclick="registrarPalpite(${jogo.id})" ${encerrado ? 'disabled' : ''}>
-            ${encerrado ? 'Encerrado' : '+ Apostar R$ 10'}
-          </button>
+          <button class="btn-apostar" onclick="registrarPalpite(${jogo.id})" ${enc ? 'disabled' : ''}>${enc ? 'Encerrado' : '+ Apostar R$ 10'}</button>
         </div>
         <div class="jogo-resultado-section">
           <div class="jogo-resultado-label">⚙️ Resultado oficial (admin):</div>
@@ -366,17 +415,11 @@
             <input type="number" class="placar-input" id="rgb-${jogo.id}" min="0" max="20" value="${res ? res.golsBrasil : 0}" />
             <span class="vs-label">×</span>
             <input type="number" class="placar-input" id="rga-${jogo.id}" min="0" max="20" value="${res ? res.golsAdv : 0}" />
-            <button class="btn-confirmar" onclick="confirmarResultado(${jogo.id})">
-              ${encerrado ? '✏️ Reeditar' : '✅ Confirmar Resultado'}
-            </button>
-            ${encerrado ? `<button class="btn-limpar-resultado" onclick="limparResultado(${jogo.id})">Limpar</button>` : ''}
+            <button class="btn-confirmar" onclick="confirmarResultado(${jogo.id})">${enc ? '✏️ Reeditar' : '✅ Confirmar Resultado'}</button>
+            ${enc ? `<button class="btn-limpar-resultado" onclick="limparResultado(${jogo.id})">Limpar</button>` : ''}
           </div>
-          ${encerrado && vencedores && vencedores.length > 0
-            ? `<div style="margin-top:0.5rem;font-size:0.83rem;color:var(--acerto);font-weight:600">🏆 Vencedor(es): ${vencedores.map(v => v.nome).join(', ')} — ${formatMoney(pot / vencedores.length)} cada!</div>`
-            : ''}
-          ${encerrado && (!vencedores || vencedores.length === 0)
-            ? `<div style="margin-top:0.5rem;font-size:0.83rem;color:var(--acumulado);font-weight:600">🔄 Ninguém acertou — ${formatMoney(pot)} acumulados para a próxima partida!</div>`
-            : ''}
+          ${enc && venc && venc.length > 0 ? `<div style="margin-top:0.5rem;font-size:0.83rem;color:var(--acerto);font-weight:600">🏆 Vencedor(es): ${venc.map(v => v.nome).join(', ')} — ${formatMoney(pot / venc.length)} cada!</div>` : ''}
+          ${enc && (!venc || venc.length === 0) ? `<div style="margin-top:0.5rem;font-size:0.83rem;color:var(--acumulado);font-weight:600">🔄 Ninguém acertou — ${formatMoney(pot)} acumulados para a próxima partida!</div>` : ''}
         </div>`;
       container.appendChild(card);
     });
@@ -385,8 +428,8 @@
   // ─── REGISTRAR PALPITE ───────────────────────────────────────────────────
   async function registrarPalpite(jogoId) {
     const nome = document.getElementById(`nome-${jogoId}`).value.trim();
-    const gb   = parseInt(document.getElementById(`gb-${jogoId}`).value) || 0;
-    const ga   = parseInt(document.getElementById(`ga-${jogoId}`).value) || 0;
+    const gb = parseInt(document.getElementById(`gb-${jogoId}`).value) || 0;
+    const ga = parseInt(document.getElementById(`ga-${jogoId}`).value) || 0;
     if (!nome) { showToast('Digite seu nome para apostar!', 'erro'); return; }
     if (nome.length > 30) { showToast('Nome muito longo!', 'erro'); return; }
     if (!tokenOk()) return;
@@ -404,10 +447,8 @@
       document.getElementById(`ga-${jogoId}`).value = '0';
       showToast(`✅ Palpite de ${nome} registrado! Brasil ${gb} × ${ga} ${jogo.adversario}`, 'sucesso');
       renderAll();
-    } catch (e) {
-      console.error(e);
-      showToast('Erro ao salvar no GitHub. Tente novamente.', 'erro');
-    } finally { setLoading(false); }
+    } catch (e) { console.error(e); showToast('Erro ao salvar. Tente novamente.', 'erro'); }
+    finally { setLoading(false); }
   }
 
   // ─── CONFIRMAR RESULTADO ─────────────────────────────────────────────────
@@ -419,18 +460,18 @@
     setLoading(true);
     try {
       await withWrite(data => {
-        const palpites = data.palpites.filter(p => p.jogoId === jogoId);
-        const pot = (palpites.length * 10) + (data.acumulados[jogoId] || 0);
+        const ps = data.palpites.filter(p => p.jogoId === jogoId);
+        const pot = (ps.length * 10) + (data.acumulados[jogoId] || 0);
         data.resultados[jogoId] = { golsBrasil: gb, golsAdv: ga, encerrado: true };
-        const acertaram = palpites.filter(p => p.golsBrasil === gb && p.golsAdv === ga);
-        if (acertaram.length === 0 && palpites.length > 0) {
+        const ac = ps.filter(p => p.golsBrasil === gb && p.golsAdv === ga);
+        if (ac.length === 0 && ps.length > 0) {
           const prox = JOGOS_BASE.find(j => j.id > jogoId);
           if (prox) { data.acumulados[prox.id] = (data.acumulados[prox.id] || 0) + pot; toastMsg = `🔄 Ninguém acertou! ${formatMoney(pot)} acumulados para o Jogo ${prox.id}!`; }
-          else { toastMsg = `🔄 Ninguém acertou! Não há próximo jogo cadastrado.`; }
+          else toastMsg = `🔄 Ninguém acertou! Não há próximo jogo.`;
           toastTipo = 'especial';
-        } else if (acertaram.length > 0) {
-          toastMsg = `🏆 ${acertaram.map(a => a.nome).join(' e ')} acertou! ${formatMoney(pot / acertaram.length)} cada!`; toastTipo = 'especial';
-        } else { toastMsg = `Resultado registrado: Brasil ${gb} × ${ga}`; }
+        } else if (ac.length > 0) {
+          toastMsg = `🏆 ${ac.map(a => a.nome).join(' e ')} acertou! ${formatMoney(pot / ac.length)} cada!`; toastTipo = 'especial';
+        } else toastMsg = `Resultado: Brasil ${gb} × ${ga}`;
         return `Resultado Jogo ${jogoId}: Brasil ${gb}x${ga}`;
       });
       showToast(toastMsg, toastTipo); renderAll();
@@ -440,19 +481,16 @@
 
   // ─── LIMPAR RESULTADO ────────────────────────────────────────────────────
   async function limparResultado(jogoId) {
-    if (!confirm('Limpar o resultado deste jogo? Isso também removerá acúmulos gerados por ele.')) return;
+    if (!confirm('Limpar o resultado? Acúmulos gerados por ele também serão removidos.')) return;
     if (!tokenOk()) return;
     setLoading(true);
     try {
       await withWrite(data => {
         const prox = JOGOS_BASE.find(j => j.id > jogoId);
-        const palpites = data.palpites.filter(p => p.jogoId === jogoId);
-        const pot = (palpites.length * 10) + (data.acumulados[jogoId] || 0);
+        const ps = data.palpites.filter(p => p.jogoId === jogoId);
+        const pot = (ps.length * 10) + (data.acumulados[jogoId] || 0);
         const res = data.resultados[jogoId];
-        if (res) {
-          const acertaram = palpites.filter(p => p.golsBrasil === res.golsBrasil && p.golsAdv === res.golsAdv);
-          if (acertaram.length === 0 && prox) data.acumulados[prox.id] = Math.max(0, (data.acumulados[prox.id] || 0) - pot);
-        }
+        if (res) { const ac = ps.filter(p => p.golsBrasil === res.golsBrasil && p.golsAdv === res.golsAdv); if (ac.length === 0 && prox) data.acumulados[prox.id] = Math.max(0, (data.acumulados[prox.id] || 0) - pot); }
         delete data.resultados[jogoId];
         return `Limpar resultado Jogo ${jogoId}`;
       });
@@ -484,99 +522,79 @@
   // ─── RENDER FILTROS ──────────────────────────────────────────────────────
   let filtroAtivo = 'todos';
   function renderFiltros() {
-    const container = document.getElementById('filtros');
-    container.innerHTML = '';
-    const btn0 = document.createElement('button');
-    btn0.className = 'filtro-btn' + (filtroAtivo === 'todos' ? ' ativo' : '');
-    btn0.textContent = 'Todos os jogos';
-    btn0.onclick = () => { filtroAtivo = 'todos'; renderAll(); };
-    container.appendChild(btn0);
+    const c = document.getElementById('filtros'); c.innerHTML = '';
+    const b0 = document.createElement('button'); b0.className = 'filtro-btn' + (filtroAtivo === 'todos' ? ' ativo' : ''); b0.textContent = 'Todos os jogos'; b0.onclick = () => { filtroAtivo = 'todos'; renderAll(); }; c.appendChild(b0);
     JOGOS_BASE.forEach(j => {
       const total = estado.palpites.filter(p => p.jogoId === j.id).length;
       if (total === 0 && filtroAtivo !== String(j.id)) return;
-      const btn = document.createElement('button');
-      btn.className = 'filtro-btn' + (filtroAtivo === String(j.id) ? ' ativo' : '');
-      btn.textContent = `Jogo ${j.id} (${total})`;
-      btn.onclick = () => { filtroAtivo = String(j.id); renderAll(); };
-      container.appendChild(btn);
+      const b = document.createElement('button'); b.className = 'filtro-btn' + (filtroAtivo === String(j.id) ? ' ativo' : ''); b.textContent = `Jogo ${j.id} (${total})`; b.onclick = () => { filtroAtivo = String(j.id); renderAll(); }; c.appendChild(b);
     });
   }
 
   // ─── RENDER PALPITES ─────────────────────────────────────────────────────
   function renderPalpites() {
-    const container = document.getElementById('palpites-container');
-    container.innerHTML = '';
+    const c = document.getElementById('palpites-container'); c.innerHTML = '';
     const jogos = filtroAtivo === 'todos' ? JOGOS_BASE : JOGOS_BASE.filter(j => String(j.id) === filtroAtivo);
     jogos.forEach(jogo => {
-      const palpites = estado.palpites.filter(p => p.jogoId === jogo.id);
+      const ps = estado.palpites.filter(p => p.jogoId === jogo.id);
       const res = estado.resultados[jogo.id];
       const pot = potDoJogo(jogo.id);
-      const acumulado = estado.acumulados[jogo.id] || 0;
-      const vencedores = checkVencedor(jogo.id);
-      const div = document.createElement('div');
-      div.className = 'palpites-jogo';
+      const ac = estado.acumulados[jogo.id] || 0;
+      const venc = checkVencedor(jogo.id);
+      const div = document.createElement('div'); div.className = 'palpites-jogo';
       div.innerHTML = `
         <div class="palpites-jogo-titulo">
           <span class="jogo-num">JOGO ${jogo.id}</span>
           <span class="palpites-jogo-nome">🇧🇷 Brasil × ${jogo.adversario}</span>
-          <span class="palpites-total">${palpites.length} palpite${palpites.length !== 1 ? 's' : ''}</span>
-          <span class="palpites-pot ${acumulado > 0 && !res?.encerrado ? 'acumulado' : ''}">${formatMoney(pot)}</span>
+          <span class="palpites-total">${ps.length} palpite${ps.length !== 1 ? 's' : ''}</span>
+          <span class="palpites-pot ${ac > 0 && !res?.encerrado ? 'acumulado' : ''}">${formatMoney(pot)}</span>
         </div>
-        ${acumulado > 0 ? `<div style="font-size:0.78rem;color:var(--acumulado);margin-bottom:0.5rem;font-weight:600">🔄 Inclui R$ ${acumulado} acumulado(s) de jogo(s) anterior(es)</div>` : ''}
+        ${ac > 0 ? `<div style="font-size:0.78rem;color:var(--acumulado);margin-bottom:0.5rem;font-weight:600">🔄 Inclui R$ ${ac} acumulado(s) de jogo(s) anterior(es)</div>` : ''}
         ${res && res.encerrado ? `<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;color:var(--azul)">Resultado: Brasil ${res.golsBrasil} × ${res.golsAdv} ${jogo.adversario}</div>` : ''}`;
-      if (palpites.length === 0) {
-        div.innerHTML += `<div class="empty-state">Nenhum palpite registrado para este jogo ainda.</div>`;
-      } else {
-        const tabela = document.createElement('table');
-        tabela.className = 'tabela-palpites';
-        tabela.innerHTML = `<thead><tr><th>Nome</th><th>Palpite</th><th>Status</th><th style="font-size:0.72rem">Registrado em</th><th></th></tr></thead><tbody>
-          ${palpites.map(p => {
-            let status = '<span class="badge-status badge-aguardando">Aguardando</span>';
-            let rowClass = '';
-            if (res && res.encerrado) {
-              const ok = p.golsBrasil === res.golsBrasil && p.golsAdv === res.golsAdv;
-              status = ok ? '<span class="badge-status badge-acerto">✅ Acertou!</span>' : '<span class="badge-status badge-errou">❌ Errou</span>';
-              if (ok) rowClass = 'acerto-exato';
-            }
-            return `<tr class="${rowClass}"><td>${p.nome}</td><td>${p.golsBrasil} × ${p.golsAdv}</td><td>${status}</td><td style="font-size:0.75rem;color:#888">${p.timestamp}</td><td><button onclick="removerPalpite(${p.id})" style="background:none;border:none;color:#ccc;cursor:pointer;font-size:0.8rem" title="Remover">✕</button></td></tr>`;
-          }).join('')}</tbody>`;
-        div.appendChild(tabela);
+      if (ps.length === 0) { div.innerHTML += `<div class="empty-state">Nenhum palpite registrado para este jogo ainda.</div>`; }
+      else {
+        const tab = document.createElement('table'); tab.className = 'tabela-palpites';
+        tab.innerHTML = `<thead><tr><th>Nome</th><th>Palpite</th><th>Status</th><th style="font-size:0.72rem">Registrado em</th><th></th></tr></thead><tbody>${ps.map(p => {
+          let st = '<span class="badge-status badge-aguardando">Aguardando</span>', rc = '';
+          if (res && res.encerrado) { const ok = p.golsBrasil === res.golsBrasil && p.golsAdv === res.golsAdv; st = ok ? '<span class="badge-status badge-acerto">✅ Acertou!</span>' : '<span class="badge-status badge-errou">❌ Errou</span>'; if (ok) rc = 'acerto-exato'; }
+          return `<tr class="${rc}"><td>${p.nome}</td><td>${p.golsBrasil} × ${p.golsAdv}</td><td>${st}</td><td style="font-size:0.75rem;color:#888">${p.timestamp}</td><td><button onclick="removerPalpite(${p.id})" style="background:none;border:none;color:#ccc;cursor:pointer;font-size:0.8rem" title="Remover">✕</button></td></tr>`;
+        }).join('')}</tbody>`;
+        div.appendChild(tab);
       }
-      container.appendChild(div);
+      c.appendChild(div);
     });
   }
 
   // ─── RENDER RESUMO ───────────────────────────────────────────────────────
   function renderResumo() {
     const total = estado.palpites.length;
-    const acumulado = Object.values(estado.acumulados || {}).reduce((a, b) => a + b, 0);
-    let ganhadores = 0;
-    JOGOS_BASE.forEach(j => { const v = checkVencedor(j.id); if (v) ganhadores += v.length; });
+    const ac = Object.values(estado.acumulados || {}).reduce((a, b) => a + b, 0);
+    let g = 0; JOGOS_BASE.forEach(j => { const v = checkVencedor(j.id); if (v) g += v.length; });
     document.getElementById('r-palpites').textContent = total;
     document.getElementById('r-valor').textContent = formatMoney(total * 10);
-    document.getElementById('r-acumulado').textContent = formatMoney(acumulado);
-    document.getElementById('r-ganhadores').textContent = ganhadores;
+    document.getElementById('r-acumulado').textContent = formatMoney(ac);
+    document.getElementById('r-ganhadores').textContent = g;
   }
 
   function renderAll() { renderJogos(); renderFiltros(); renderPalpites(); renderResumo(); }
 
   // ─── INICIALIZAÇÃO ───────────────────────────────────────────────────────
   async function init() {
-    if (GH_TOKEN === 'COLOQUE_SEU_TOKEN_AQUI') {
-      document.getElementById('token-aviso').style.display = 'block';
-    }
+    atualizarBotaoToken();
     try {
       const { data } = await ghFetch();
       estado = data;
       atualizarSyncInfo();
     } catch (e) {
-      console.error('Erro ao carregar dados do GitHub:', e);
-      document.getElementById('sync-info').textContent = '❌ Erro ao conectar ao GitHub';
-      document.getElementById('jogos-container').innerHTML =
-        '<div class="empty-state" style="color:var(--erro)">❌ Não foi possível carregar os dados. Verifique o token configurado.</div>';
+      console.error(e);
+      document.getElementById('sync-info').textContent = '❌ Erro ao carregar';
+      document.getElementById('jogos-container').innerHTML = '<div class="empty-state" style="color:var(--erro)">❌ Falha ao carregar dados. Verifique sua conexão.</div>';
       return;
     }
     renderAll();
+    if (!getToken()) {
+      setTimeout(() => showToast('Configure o token para adicionar palpites ⚙️', 'especial'), 1500);
+    }
     setInterval(async () => {
       try { const { data } = await ghFetch(); estado = data; renderAll(); atualizarSyncInfo(); }
       catch (e) { console.warn('Auto-refresh falhou:', e); }
