@@ -67,12 +67,12 @@
   ],
   "resultados": {
     "1": {
-      "golsBrasil": 0,
-      "golsAdv": 0,
+      "golsBrasil": 1,
+      "golsAdv": 1,
       "encerrado": true
     }
   },
   "acumulados": {
-    "2": 40
+    "2": 80
   }
 }
