@@ -65,14 +65,8 @@
       "timestamp": "19/06/2026, 19:23:13"
     }
   ],
-  "resultados": {
-    "1": {
-      "golsBrasil": 1,
-      "golsAdv": 1,
-      "encerrado": true
-    }
-  },
+  "resultados": {},
   "acumulados": {
-    "2": 80
+    "2": 40
   }
 }
