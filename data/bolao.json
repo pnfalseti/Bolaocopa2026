@@ -139,6 +139,11 @@
       "golsBrasil": 3,
       "golsAdv": 0,
       "encerrado": true
+    },
+    "4": {
+      "golsBrasil": 2,
+      "golsAdv": 1,
+      "encerrado": true
     }
   },
   "acumulados": {
